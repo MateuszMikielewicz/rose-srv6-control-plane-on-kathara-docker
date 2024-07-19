@@ -1,26 +1,10 @@
-# ROSE SRv6 Control Plane <img align="right" src="https://img.shields.io/github/stars/netgroup/rose-srv6-control-plane?style=social">
+# ROSE SRv6 Control Plane On Kathara Docker
 
-<div align="center">
-    <div align="center">
-        <img src="https://img.shields.io/badge/python-3.6|3.7|3.8-blue?logo=python">
-        <img src="https://github.com/netgroup/rose-srv6-control-plane/workflows/Python%20package/badge.svg">
-        <img src="https://github.com/netgroup/rose-srv6-control-plane/workflows/Lint%20Code%20Base/badge.svg">
-        <img src="https://img.shields.io/github/license/netgroup/rose-srv6-control-plane">
-        <img src="https://img.shields.io/github/v/release/netgroup/rose-srv6-control-plane?sort=semver">
-    </div>
-    <div align="center">
-        <img src="https://img.shields.io/github/release-date/netgroup/rose-srv6-control-plane">
-        <img src="https://img.shields.io/github/issues/netgroup/rose-srv6-control-plane">
-        <img src="https://img.shields.io/github/issues-closed/netgroup/rose-srv6-control-plane">
-        <img src="https://img.shields.io/github/issues-pr/netgroup/rose-srv6-control-plane">
-        <img src="https://img.shields.io/github/issues-pr-closed/netgroup/rose-srv6-control-plane">
-        <!--<img src="https://img.shields.io/github/contributors/netgroup/rose-srv6-control-plane">-->
-        <!--<img src="https://img.shields.io/github/commit-activity/m/netgroup/rose-srv6-control-plane">-->
-    </div>
-</div>
-<br />
+## This is a fork of an ROSE SRv6 Control Plane repository (see link [https://github.com/netgroup/rose-srv6-control-plane](https://github.com/netgroup/rose-srv6-control-plane))
 
-> Control plane functionalities for SDN.
+This for was created due to having conflicts in python libraries and requirements.txt files was changed so they are suited for an installation on a Kathara Docker Images.
+
+**Arango_DB is disabled** due to an error with its Python libraries.
 
 <a href="https://netgroup.github.io/rose/">
     <img align="right" src="docs/images/rose-logo-recolored-red-200x60.png">
