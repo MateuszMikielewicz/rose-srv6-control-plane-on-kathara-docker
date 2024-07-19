@@ -32,7 +32,7 @@ ArangoDB driver
 
 
 # python-arango dependencies
-from arango import ArangoClient
+#from arango import ArangoClient
 
 
 class NodesConfigNotLoadedError(Exception):

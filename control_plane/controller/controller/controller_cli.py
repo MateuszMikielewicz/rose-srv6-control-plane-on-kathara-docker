@@ -41,9 +41,9 @@ from dotenv import load_dotenv
 from pkg_resources import resource_filename
 
 # Controller dependencies
-from controller import arangodb_driver
-from controller.init_db import init_db
-from controller.init_db import init_db_collections
+#from controller import arangodb_driver
+#from controller.init_db import init_db
+#from controller.init_db import init_db_collections
 from controller.nb_grpc_server import grpc_server
 
 
