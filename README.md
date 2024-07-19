@@ -2,7 +2,7 @@
 
 ## This is a fork of an ROSE SRv6 Control Plane repository (see link [https://github.com/netgroup/rose-srv6-control-plane](https://github.com/netgroup/rose-srv6-control-plane))
 
-This for was created due to having conflicts in python libraries and requirements.txt files was changed so they are suited for an installation on a Kathara Docker Images.
+This fork was created due to conflicts in Python libraries versions. The requirements.txt files were changed and they are suited for an installation on a Kathara Docker Images.
 
 **Arango_DB is disabled** due to an error with its Python libraries.
 
