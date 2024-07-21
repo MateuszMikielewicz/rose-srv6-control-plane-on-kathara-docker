@@ -39,9 +39,9 @@ import nb_commons_pb2
 import topology_manager_pb2
 import topology_manager_pb2_grpc
 # Controller dependencies
-#from controller import arangodb_utils
-#from controller import arangodb_driver
-#from controller import topo_utils
+from controller import arangodb_utils
+from controller import arangodb_driver
+from controller import topo_utils
 from controller.ti_extraction import connect_and_extract_topology_isis
 from controller.ti_extraction import dump_topo_yaml
 
