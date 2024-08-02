@@ -141,7 +141,7 @@ class SRv6ManagerLinux():
             'uN': self.handle_un_behavior_request,
         }
 
-    def handle_srv6_path_request(self, operation, request, context):
+    def handle_srv6_path_request(self, operation, request, context, bmv2_controller, if_bmv2):
         # pylint: disable=unused-argument
         """Handler for SRv6 paths"""
 
@@ -170,13 +170,29 @@ class SRv6ManagerLinux():
                     elif operation == 'add':
                         oif = self.interface_to_idx[
                             self.non_loopback_interfaces[0]]
-                    self.ip_route.route(operation, dst=path.destination,
-                                        oif=oif,
-                                        table=table,
-                                        priority=metric,
-                                        encap={'type': 'seg6',
-                                               'mode': path.encapmode,
-                                               'segs': segments})
+                    LOGGER.debug("path destination is %s", path.destination)
+                    LOGGER.debug("srv6 segments are %s", ['3:202:2::', '2001:2:4::1'])
+                    # Check if BMv2 device is used
+                    if if_bmv2:
+                        LOGGER.debug('Adding table entry to the BMv2 device')
+                        segments_len=len(segments)
+                        if segments_len == 2:
+                            table_action = 'srv6_t_insert_2'
+                        elif segments_len == 3:
+                            table_action = 'srv6_t_insert_3'
+                        else:
+                            LOGGER.error('BMv2 device with current P4 code only supports 2 and 3 segments in an SRv6 path')
+                        destination = path.destination + '/128'                       
+                        bmv2_controller.table_add('srv6_transit',table_action, [destination], segments[::-1])
+                    # If not make add a route onto the Linux machine using ip_route
+                    else:
+                        self.ip_route.route(operation, dst=path.destination,
+                     	            oif=oif,
+                     	            table=table,
+                     	            priority=metric,
+                     	            encap={'type': 'seg6',
+                     	                   'mode': path.encapmode,
+                     	                   'segs': segments})
             elif operation == 'get':
                 return srv6_manager_pb2.SRv6ManagerReply(
                     status=commons_pb2.STATUS_OPERATION_NOT_SUPPORTED)
