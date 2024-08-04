@@ -171,20 +171,22 @@ class SRv6ManagerLinux():
                         oif = self.interface_to_idx[
                             self.non_loopback_interfaces[0]]
                     LOGGER.debug("path destination is %s", path.destination)
-                    LOGGER.debug("srv6 segments are %s", ['3:202:2::', '2001:2:4::1'])
+                    LOGGER.debug("srv6 segments are %s", segments[::-1])
                     # Check if BMv2 device is used
                     if if_bmv2:
                         LOGGER.debug('Adding table entry to the BMv2 device')
                         segments_len=len(segments)
+                        # Only paths with 2 or 3 segments are valid
                         if segments_len == 2:
                             table_action = 'srv6_t_insert_2'
                         elif segments_len == 3:
                             table_action = 'srv6_t_insert_3'
                         else:
                             LOGGER.error('BMv2 device with current P4 code only supports 2 and 3 segments in an SRv6 path')
-                        destination = path.destination + '/128'                       
+                        destination = path.destination
+                        #Add a srv6 path insert into a p4 table                  
                         bmv2_controller.table_add('srv6_transit',table_action, [destination], segments[::-1])
-                    # If not make add a route onto the Linux machine using ip_route
+                    # If not, add a srv6 route in the Linux machine using ip_route
                     else:
                         self.ip_route.route(operation, dst=path.destination,
                      	            oif=oif,

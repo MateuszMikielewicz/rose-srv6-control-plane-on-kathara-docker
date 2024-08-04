@@ -93,8 +93,14 @@ class SRv6Manager(srv6_manager_pb2_grpc.SRv6ManagerServicer):
         # SRv6 Manager for VPP Forwarding Engine
         # self.srv6_mgr_vpp = None TODO remove
         self.srv6_mgr_vpp = SRv6ManagerVPP()      # TODO
-        self.bmv2_controller = SimpleSwitchP4RuntimeAPI(1, 9559, 'localhost','/shared/build/p4info.txt', '/shared/build/bmv2.json')
         self.if_bmv2 = if_bmv2
+        if if_bmv2:
+            #Setting up a P4Runtime deamon 
+            self.bmv2_controller = SimpleSwitchP4RuntimeAPI(1, 9559, 'localhost','/shared/build/p4info.txt', '/shared/build/bmv2.json')
+            # TODO: Change print func to LOGGER.info. Func LOGGER.info doesn't not work as assumed. Thats why simple print is used.
+            print('INFO:node_manager.srv6_manager:*** Creates P4Runtime connection with BMv2 on address [::]:9559')
+        else:
+            self.bmv2_controller = None
 
     def handle_srv6_path_request(self, operation, request, context):
         # pylint: disable=unused-argument
