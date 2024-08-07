@@ -1,10 +1,24 @@
-# ROSE SRv6 Control Plane On Kathara Docker
+# ROSE SRv6 Control Plane on Kathara Docker
 
-## This is a fork of an ROSE SRv6 Control Plane repository (see link [https://github.com/netgroup/rose-srv6-control-plane](https://github.com/netgroup/rose-srv6-control-plane))
+## This is a fork of an ROSE SRv6 Control Plane repository (see [rose-srv6-control-plane](https://github.com/netgroup/rose-srv6-control-plane))
 
-This fork was created due to conflicts in Python libraries versions. The requirements.txt files were changed and they are suited for an installation on a Kathara Docker Images.
+This fork is suited for an installation on a Kathara Docker Images. 
 
-**Arango_DB is disabled** due to an error with its Python libraries.
+This branch adds the feature of setting a SRv6 path as an P4 table insert to the BMv2 device via the P4Runtime.
+It is added as a part of the **control_plane/node-manager** package.
+
+To start the node manager with the BMv2 device configuration run the following command:
+
+    node_manager --bmv2
+
+An example of P4 SRv6 SDN network is prepared on a Kathara emulator (see [SRv6_Kathara](https://github.com/MateuszMikielewicz/SRv6_Kathara/tree/adding_rose_srv6_sdn_controller)).
+
+## NOTE
+In this fork **Arango_DB is disabled** due to an error with its Python libraries.
+
+Currently node manager lacks  a possibility to modyfi configuration of the BMv2 feature. It uses **hard coded port number** (**9559**) and **p4 compilation output paths** (**/shared/build/p4info.txt**, **/shared/build/bmv2.json**) in order to connect via SimpleSwitchP4RuntimeAPI to the BMv2 device. You can modyfi them inside the **control_plane/node-manager/node_manager/srv6_manager.py** file and then rebuild the app.
+
+**SRv6 path insertion** to the P4 table is based on a **specyfic P4 code**. Table name and its actions are hardcoded.
 
 <a href="https://netgroup.github.io/rose/">
     <img align="right" src="docs/images/rose-logo-recolored-red-200x60.png">
