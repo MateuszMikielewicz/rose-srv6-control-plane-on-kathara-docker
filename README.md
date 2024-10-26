@@ -4,8 +4,10 @@
 
 This fork is suited for an installation on a Kathara Docker Images. 
 
-This branch adds the feature of setting a SRv6 path as an P4 table insert to the BMv2 device via the P4Runtime.
+It also ads the feature of setting a SRv6 path as an P4 table insert to the BMv2 device via the P4Runtime.
 It is added as a part of the **control_plane/node-manager** package.
+The solution is now heavily dependent on the P4 code from [ngsdn-tutorial](https://github.com/MateuszMikielewicz/SRv6_Kathara/tree/adding_rose_srv6_sdn_controller).
+If you want to create your own P4 code, please use the same [table](https://github.com/opennetworkinglab/ngsdn-tutorial/blob/advanced/solution/p4src/main.p4#L551) name and structure for setting SRv6 path.
 
 To start the node manager with the BMv2 device configuration run the following command:
 
