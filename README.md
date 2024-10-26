@@ -6,8 +6,6 @@ This fork is suited for an installation on a Kathara Docker Images.
 
 It also ads the feature of setting a SRv6 path as an P4 table insert to the BMv2 device via the P4Runtime.
 It is added as a part of the **control_plane/node-manager** package.
-The solution is now heavily dependent on the P4 code from [ngsdn-tutorial](https://github.com/MateuszMikielewicz/SRv6_Kathara/tree/adding_rose_srv6_sdn_controller).
-If you want to create your own P4 code, please use the same [table](https://github.com/opennetworkinglab/ngsdn-tutorial/blob/advanced/solution/p4src/main.p4#L551) name and structure for setting SRv6 path.
 
 To start the node manager with the BMv2 device configuration run the following command:
 
@@ -20,7 +18,9 @@ In this fork **Arango_DB is disabled** due to an error with its Python libraries
 
 Currently node manager lacks  a possibility to modyfi configuration of the BMv2 feature. It uses **hard coded port number** (**9559**) and **p4 compilation output paths** (**/shared/build/p4info.txt**, **/shared/build/bmv2.json**) in order to connect via SimpleSwitchP4RuntimeAPI to the BMv2 device. You can modyfi them inside the **control_plane/node-manager/node_manager/srv6_manager.py** file and then rebuild the app.
 
-**SRv6 path insertion** to the P4 table is based on a **specyfic P4 code**. Table name and its actions are hardcoded.
+**SRv6 path insertion** to the P4 table is based on a **specyfic P4 code**. Table name and its actions are hardcoded. 
+If you want to create your own P4 code, please use the same [table](https://github.com/opennetworkinglab/ngsdn-tutorial/blob/advanced/solution/p4src/main.p4#L551) name and structure for setting SRv6 path or modyfi the **control_plane/node-manager/node_manager/srv6_mgr_linux.py** file.
+
 
 <a href="https://netgroup.github.io/rose/">
     <img align="right" src="docs/images/rose-logo-recolored-red-200x60.png">
