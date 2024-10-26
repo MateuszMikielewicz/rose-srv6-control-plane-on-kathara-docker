@@ -72,6 +72,8 @@ DEFAULT_KEY = 'key_server.pem'
 DEFAULT_ENV_FILE_PATH = resource_filename(__name__, 'config/node_manager.env')
 # Define whether to enable the debug mode or not
 DEFAULT_DEBUG = False
+# Define whether the BMv2 device will be used
+DEFAULT_BMV2 = False
 
 # Module imported dynamically
 SRV6_MANAGER = None
@@ -85,7 +87,8 @@ def start_server(grpc_ip=DEFAULT_GRPC_IP,
                  grpc_port=DEFAULT_GRPC_PORT,
                  secure=DEFAULT_SECURE,
                  certificate=DEFAULT_CERTIFICATE,
-                 key=DEFAULT_KEY):
+                 key=DEFAULT_KEY,
+                 if_bmv2=DEFAULT_BMV2):
     """Start a gRPC server"""
 
     # Get family of the gRPC IP
@@ -105,7 +108,7 @@ def start_server(grpc_ip=DEFAULT_GRPC_IP,
     grpc_server = grpc.server(futures.ThreadPoolExecutor())
     # SRv6 Manager
     SRV6_MANAGER_PB2_GRPC.add_SRv6ManagerServicer_to_server(
-        SRV6_MANAGER.SRv6Manager(), grpc_server)
+        SRV6_MANAGER.SRv6Manager(if_bmv2), grpc_server)
     # PM Manager
     try:
         pm_manager.add_pm_manager_to_server(grpc_server)
@@ -408,6 +411,9 @@ def parse_arguments():
     parser.add_argument(
         '-d', '--debug', action='store_true', help='Activate debug logs'
     )
+    parser.add_argument(
+        '--bmv2', action='store_true', help='Configure node_manager to work with BMv2 switch'
+    )
     # Parse input parameters
     args = parser.parse_args()
     # Return the arguments
@@ -459,6 +465,8 @@ def __main():
         config.debug = args.debug
     else:
         logger.setLevel(level=logging.INFO)
+    # Variable to check if BMv2 is used
+    if_bmv2=args.bmv2
     # Debug settings
     server_debug = logger.getEffectiveLevel() == logging.DEBUG
     logging.info('SERVER_DEBUG: %s', server_debug)
@@ -481,7 +489,7 @@ def __main():
     certificate = config.grpc_server_certificate_path
     key = config.grpc_server_key_path
     # Start the server
-    start_server(grpc_ip, grpc_port, secure, certificate, key)
+    start_server(grpc_ip, grpc_port, secure, certificate, key, if_bmv2)
 
 
 if __name__ == '__main__':

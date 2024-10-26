@@ -49,6 +49,8 @@ from node_manager.srv6_mgr_vpp import SRv6ManagerVPP  # TODO
 # Import constants file
 from node_manager.constants import FWD_ENGINE
 
+from p4utils.utils.sswitch_p4runtime_API import SimpleSwitchP4RuntimeAPI
+
 # Load environment variables from .env file
 # load_dotenv()
 
@@ -85,12 +87,20 @@ DEFAULT_KEY = 'key_server.pem'
 class SRv6Manager(srv6_manager_pb2_grpc.SRv6ManagerServicer):
     """gRPC request handler"""
 
-    def __init__(self):
+    def __init__(self, if_bmv2):
         # SRv6 Manager for Linux Forwarding Engine
         self.srv6_mgr_linux = SRv6ManagerLinux()
         # SRv6 Manager for VPP Forwarding Engine
         # self.srv6_mgr_vpp = None TODO remove
         self.srv6_mgr_vpp = SRv6ManagerVPP()      # TODO
+        self.if_bmv2 = if_bmv2
+        if if_bmv2:
+            #Setting up a P4Runtime deamon 
+            self.bmv2_controller = SimpleSwitchP4RuntimeAPI(1, 9559, 'localhost','/shared/build/p4info.txt', '/shared/build/bmv2.json')
+            # TODO: Change print func to LOGGER.info. Func LOGGER.info doesn't not work as assumed. Thats why simple print is used.
+            print('INFO:node_manager.srv6_manager:*** Creates P4Runtime connection with BMv2 on address [::]:9559')
+        else:
+            self.bmv2_controller = None
 
     def handle_srv6_path_request(self, operation, request, context):
         # pylint: disable=unused-argument
@@ -104,7 +114,9 @@ class SRv6Manager(srv6_manager_pb2_grpc.SRv6ManagerServicer):
             # Linux forwarding engine
             return self.srv6_mgr_linux.handle_srv6_path_request(operation,
                                                                 request,
-                                                                context)
+                                                                context, 
+                                                                self.bmv2_controller,
+                                                                self.if_bmv2)
         if fwd_engine == FWD_ENGINE['linux']:
             # VPP forwarding engine
             # TODO gestire caso VPP non abilitato o non disponibile
@@ -298,6 +310,10 @@ def parse_arguments():
     parser.add_argument(
         '-d', '--debug', action='store_true', help='Activate debug logs'
     )
+    parser.add_argument(
+        '--bmv2', action='store_true', help='Configure node_manager to work with BMv2 switch'
+    )
+    
     # Parse input parameters
     args = parser.parse_args()
     # Return the arguments
